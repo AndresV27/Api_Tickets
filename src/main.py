@@ -6,6 +6,7 @@ from src.models.role import Role
 from src.models.user import User
 from src.routers.user_routers import user_router
 from src.routers.auth_routers import auth_router
+from src.routers.ticket_routers import ticket_router
 from src.utils.auth import hash_password
 from contextlib import asynccontextmanager
 
@@ -61,6 +62,7 @@ app = FastAPI(title="Tickets API",  lifespan= startup)
 
 app.include_router(user_router)
 app.include_router(auth_router)
+app.include_router(ticket_router)
 
 @app.get("/")
 def root():

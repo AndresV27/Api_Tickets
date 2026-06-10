@@ -9,7 +9,7 @@ class Ticket(Base):
      id = Column(Integer, primary_key=True, index=True)
      title = Column(String, nullable= False)
      description = Column(String, nullable=False)
-     status = Column(String, nullable=False)
+     status = Column(String, nullable=False, default="created")
      priority = Column(String, nullable= False)
      created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
      user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
