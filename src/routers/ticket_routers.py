@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from src.database.db import get_db
 from src.models.ticket import Ticket
 from src.schemas.ticket_schema import TicketCreate, TicketUpdate, TicketResponse, TicketStatus, TicketPriority, TicketAssign
@@ -29,7 +30,12 @@ def get_tickets(
     current_user: User = Depends(get_current_user)):
    
    if current_user.role_id == 1:
-       query = db.query(Ticket)
+       query = db.query(Ticket).filter(
+           or_(
+               Ticket.assigned_to == current_user.id,
+               Ticket.user_id == current_user.id
+           )
+       )
    else:
        query = db.query(Ticket).filter(Ticket.user_id == current_user.id)
    
