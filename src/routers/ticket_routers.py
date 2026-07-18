@@ -52,9 +52,14 @@ def get_tickets(
 def get_ticket(ticket_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     ticket = get_ticket_or_404(ticket_id, db)
 
-    if current_user.role_id != 1:
-        verify_ticket_owner(ticket,current_user)        
+    if current_user.role_id == 1:
+       if ticket.assigned_to != current_user.id and ticket.user_id != current_user.id:
+           raise HTTPException(status_code=403, detail="Not authorized")
+    else: 
+        verify_ticket_owner(ticket, current_user)   
+    
     return ticket
+
 
 #-----------UpdateTicket--------------------
 @ticket_router.put("/{ticket_id}", response_model=TicketResponse)

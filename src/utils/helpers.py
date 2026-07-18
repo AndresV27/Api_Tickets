@@ -25,5 +25,5 @@ def validate_active_user(user: User):
 #-----------VerifyTicketOwner--------------------
 def verify_ticket_owner(ticket: Ticket, current_user: User):
     if ticket.user_id != current_user.id:
-       raise HTTPException(status_code=403, detail="Not authorized to access this task")
+       raise HTTPException(status_code=403, detail="Not authorized to access this ticket")
     
