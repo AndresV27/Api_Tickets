@@ -8,7 +8,7 @@ from src.utils.dependencies import get_current_user
 from src.utils.helpers import get_ticket_or_404
 from src.schemas.comment_schema import CommentBase, CommentCreate, CommentResponse
 
-comment_router = APIRouter(prefix="/comments", tags=["Comments"])
+comment_router = APIRouter(prefix="/tickets", tags=["Comments"])
 
 #-----------CreateComment--------------------
 @comment_router.post("/{ticket_id}/comments", response_model=CommentResponse)
@@ -26,6 +26,13 @@ def create_comment(ticket_id: int, comment: CommentCreate, db: Session= Depends(
     return db_comment
 
 #-----------GetComments--------------------
+@comment_router.get("/{ticket_id}/comments", response_model= list[CommentResponse])
+def get_comments(ticket_id: int, db: Session= Depends(get_db), current_user: User= Depends(get_current_user)):
+    get_ticket_or_404(ticket_id, db)
+
+    query = db.query(Comment).filter(Comment.ticket_id == ticket_id).all()
+    return  query
+
 
 
 
