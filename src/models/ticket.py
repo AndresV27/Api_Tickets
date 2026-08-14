@@ -17,3 +17,4 @@ class Ticket(Base):
      owner = relationship("User",foreign_keys=[user_id], back_populates="tickets")
      assigned = relationship("User", foreign_keys=[assigned_to], back_populates="assigned_tickets")
      comments = relationship("Comment", back_populates="ticket")
+     history = relationship("TicketHistory", back_populates="ticket")
