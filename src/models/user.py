@@ -15,3 +15,4 @@ class User(Base):
     role = relationship("Role", back_populates="users")
     assigned_tickets = relationship("Ticket", foreign_keys="Ticket.assigned_to", back_populates="assigned")
     comments = relationship("Comment", back_populates="owner")
+    ticket_history = relationship("TicketHistory", back_populates="changed_by_user")

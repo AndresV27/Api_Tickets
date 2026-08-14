@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.models import comment, role, ticket, user
+from src.models import comment, role, ticket, user, ticket_history
 from src.database.db import engine, SessionLocal
 from src.models import role, user
 from src.models.role import Role
@@ -18,6 +18,7 @@ comment.Base.metadata.create_all(bind=engine)
 role.Base.metadata.create_all(bind=engine)
 ticket.Base.metadata.create_all(bind=engine)
 user.Base.metadata.create_all(bind=engine)
+ticket_history.Base.metadata.create_all(bind=engine)
 
 #-----------CreateDefaultRoles--------------------
 def create_default_roles():
