@@ -4,7 +4,7 @@ from sqlalchemy import or_
 from src.database.db import get_db
 from src.models.ticket import Ticket
 from src.schemas.ticket_schema import TicketCreate, TicketUpdate, TicketResponse, TicketStatus, TicketPriority, TicketAssign
-from src.utils.helpers import get_ticket_or_404, verify_ticket_owner, get_user_or_404
+from src.utils.helpers import get_ticket_or_404, verify_ticket_owner, get_user_or_404, register_ticket_history
 from src.utils.dependencies import get_current_user, requiere_admin
 from src.models.user import User
 
@@ -65,8 +65,13 @@ def get_ticket(ticket_id: int, db: Session = Depends(get_db), current_user: User
 @ticket_router.put("/{ticket_id}", response_model=TicketResponse)
 def update_ticket(ticket_id: int, ticket_data: TicketUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     ticket = get_ticket_or_404(ticket_id, db)
+    new_status = ticket_data.status
+
     if current_user.role_id != 1:
        verify_ticket_owner(ticket, current_user)
+
+    if new_status:
+        register_ticket_history(ticket, new_status, current_user, db)
 
     for field, value in ticket_data.model_dump(exclude_unset=True).items():
         setattr(ticket, field, value)
