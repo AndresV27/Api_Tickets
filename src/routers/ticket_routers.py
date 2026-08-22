@@ -33,6 +33,7 @@ def get_tickets(
        query = db.query(Ticket).filter(
            or_(
                Ticket.assigned_to == current_user.id,
+               Ticket.assigned_to == None,
                Ticket.user_id == current_user.id
            )
        )
